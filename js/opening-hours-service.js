@@ -3,13 +3,13 @@
 
 var osmcz = osmcz || {};
 osmcz.openingHoursService = {};
-osmcz.openingHoursService.getHtml = function (v) {
+osmcz.openingHoursService.getHtml = function (v,c) {
     var opening_hours = require('opening_hours');
 
     if (!v)
         return [];
 
-    var oh = new opening_hours(v);
+    var oh = new opening_hours(v,c);
 
     // Truncate time values from given date. Set it to 00:00.0000
     function truncTime(v) {
