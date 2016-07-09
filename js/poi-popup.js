@@ -244,11 +244,24 @@ osmcz.poiPopup.getHtml = function (feature, icon, embedded = false) {
     };
 
     section(name, 'Další jména:', true);
-    try {
-        tpl = tpl.concat(osmcz.openingHoursService.getHtml(openingHours));
-    } catch (err) {
-        tpl.push("<b>opening_hours</b> = " + openingHours + "<br> <em>(Nepodařilo se naparsovat: "+err+")</em>");
+                 
+    if (openingHours) {
+    
+        $.ajax({
+            url: "https://nominatim.openstreetmap.org/reverse?format=json&osm_id=" + id + "&osm_type=" + osm_type.substring(0,1).toUpperCase(), 
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                try {
+                    tpl = tpl.concat(osmcz.openingHoursService.getHtml(openingHours, data));
+                } catch (err) {
+                    tpl.push("<b>opening_hours</b> = " + openingHours + "<br> <em>(Nepodařilo se naparsovat: "+err+")</em>");
+                }
+            }
+        });
     }
+    
+   
     section(payment, 'Možnosti platby:');
     section(contact, 'Kontakty:');
     section(building, 'Budova:');
